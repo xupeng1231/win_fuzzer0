@@ -2,7 +2,7 @@ import os
 import time
 import traceback
 from subprocess import Popen
-from xclient import beat
+from xclient import beat,init_name
 
 sample_path=os.path.join(os.getcwd(),"sample","sample.pdf")
 input_dir=os.path.join(os.getcwd(),"input")
@@ -39,6 +39,8 @@ def fuzzer(last_input_file):
 
 
 if __name__=="__main__":
+    time.sleep(10)
+    init_name()
     Popen(args=["python", "generate.py"])
     Popen(args=["python", "myreport.py"])
     last_input_file=None
