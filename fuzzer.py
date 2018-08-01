@@ -2,6 +2,7 @@ import os
 import time
 import traceback
 from subprocess import Popen
+from xclient import beat
 
 sample_path=os.path.join(os.getcwd(),"sample","sample.pdf")
 input_dir=os.path.join(os.getcwd(),"input")
@@ -32,7 +33,6 @@ def fuzzer(last_input_file):
 
     Popen("windbg -c \".load pykd;!py " + os.path.join(os.getcwd(), "p.py " + input_file_path.split("\\")[
         -1]) + "\" -o C:\\Program Files (x86)\\Adobe\\Acrobat Reader DC\\Reader\\Acrord32.exe " + input_file_path,shell=True)
-    #os.system("windbg -c \".load pykd.pyd;!py "+os.path.join(os.getcwd(),"p.py "+input_file_path.split("\\")[-1])+"\" -o C:\\Program Files (x86)\\Adobe\\Acrobat Reader DC\\Reader\\Acrord32.exe "+input_file_path)
     time.sleep(13)
     kill_windbg(1,2)
     return input_file_path
@@ -48,6 +48,7 @@ if __name__=="__main__":
                 time.sleep(2)
                 print "waiting"
             input_file = fuzzer(last_input_file)
+            beat() # beat to server
             if last_input_file:
                 os.remove(last_input_file)
             last_input_file=input_file
