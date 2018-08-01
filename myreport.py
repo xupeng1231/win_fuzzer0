@@ -9,7 +9,6 @@ if not os.path.exists(crash_dir):
     os.makedirs(crash_dir)
 
 reported=[]
-
 while True:
     fs=os.listdir(crash_dir)
     for f in fs:

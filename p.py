@@ -68,7 +68,7 @@ while True:
         event=e(".lastevent")
         kstr=e("k L2")
         rstr=e("r")
-        if not (kstr.find("verifier!VerifierStopMessage") >= 0):
+        if (kstr.find("verifier!VerifierStopMessage") >= 0):
             save_sample("M")
         if event.find("WOW64 breakpoint") > 0 or event.find("Break instruction exception") > 0 or event.find("Exit process") > 0 or rstr.find("ntdll!KiFastSystemCallRet") > 0:
             continue

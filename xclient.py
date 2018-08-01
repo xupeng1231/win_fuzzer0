@@ -11,11 +11,12 @@ def init_name():
         return
     while True:
         try:
-            r=redis.Redis(connection_pool=pool)
-            vname=r.get("thisvname")
+            r = redis.Redis(connection_pool=pool)
+            vname = r.get("thisvname")
             if not vname is None:
                 with open("name.txt", "wt") as idf:
                     idf.write(vname)
+                r.delete("thisvname")
                 break
             time.sleep(2)
         except:
