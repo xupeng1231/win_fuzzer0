@@ -2,9 +2,9 @@ import time
 import redis
 import traceback
 import os
+import hashlib
 
 pool=redis.ConnectionPool(host="192.168.4.2",port="6379",decode_responses=True)
-
 
 def init_name():
     if os.path.exists("name.txt"):
@@ -42,10 +42,19 @@ def beat():
 
 
 def report_crash(crash):
+    hash=hashlib.md5()
+    hash.update(crash)
+    md5=hash.hexdigest()
     for _ in range(4):
         try:
             r = redis.Redis(connection_pool=pool)
+            md5_len=int(r.llen("crashes_md5"))
+            for i in range(0,md5_len):
+                if md5 == r.lindex("crashes_md5",i):
+                    print "already existed!!"
+                    return
             r.rpush("crashes",crash)
+            r.rpush("crashes_md5",md5)
             break
         except:
             traceback.print_exc()

@@ -23,18 +23,25 @@ if not os.path.exists(input_dir):
 if not os.path.exists(crash_dir):
     os.makedirs(crash_dir)
 
+
 def save_sample(who_find):
-    log( str(who_find)+" FIND VULNERABILITY!!!"+"#"*64+datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S"))
+    try:
+        log( "\n"+str(who_find)+" FIND VULNERABILITY!!!"+"#"*64+datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S"))
+    except:
+        traceback.print_exc()
+
     sample_file=sys.argv[1]
     try:
-        Popen("python mycopy.py "+os.path.join(input_dir, sample_file)+" "+os.path.join(crash_dir, sample_file),shell=True)
+        Popen(args=["python", "mycopy.py",os.path.join(input_dir, sample_file),os.path.join(crash_dir, sample_file)],shell=True)
     except:
         traceback.print_exc()
+
     try:
         shutil.copyfile(os.path.join(input_dir, sample_file), os.path.join(crash_dir, sample_file))
     except:
         traceback.print_exc()
         shutil.copyfile(os.path.join(input_dir, sample_file), os.path.join(crash_dir, sample_file))
+
     try:
         logf=open(os.path.join(crash_dir,"log_"+sample_file+".txt"),"wt")
         logf.write("*"*40+".lastevent"+"*"*40+"\n"*2)
@@ -58,11 +65,12 @@ def save_sample(who_find):
 while True:
     try:
         res_g=e("sxd cpr;sxd ld;sxd ct;sxd et;g")
-        exc=e(".lastevent")
-    	kstr=e("k L2")
-        if kstr.find("verifier!VerifierStopMessage")>=0:
+        event=e(".lastevent")
+        kstr=e("k L2")
+        rstr=e("r")
+        if not (kstr.find("verifier!VerifierStopMessage") >= 0):
             save_sample("M")
-        if exc.find("Break instruction exception") > 0 or exc.find("Exit process") > 0 or e("r").find("ntdll!KiFastSystemCallRet") > 0:
+        if event.find("WOW64 breakpoint") > 0 or event.find("Break instruction exception") > 0 or event.find("Exit process") > 0 or rstr.find("ntdll!KiFastSystemCallRet") > 0:
             continue
         save_sample("I")
     except:

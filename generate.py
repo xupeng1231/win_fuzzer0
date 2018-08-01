@@ -94,7 +94,7 @@ def loop_generate():
         u3d1js_str=u3d1jsf.read()
 
     while True:
-	while len(os.listdir(".\\input"))>=100:
+	while len(os.listdir(".\\input"))>=30:
 		print "sleeping"
 		time.sleep(100)
         try:
